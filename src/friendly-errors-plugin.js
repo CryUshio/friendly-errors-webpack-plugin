@@ -30,6 +30,7 @@ class FriendlyErrorsWebpackPlugin {
     this.compilationSuccessInfo = options.compilationSuccessInfo || {};
     this.onErrors = options.onErrors;
     this.shouldClearConsole = options.clearConsole == null ? true : Boolean(options.clearConsole);
+    this.shouldDisplaySuccess = options.displaySuccess == null ? true : Boolean(options.displaySuccess);
     this.formatters = concat(defaultFormatters, options.additionalFormatters);
     this.transformers = concat(defaultTransformers, options.additionalTransformers);
     this.previousEndTimes = {};
@@ -81,6 +82,10 @@ class FriendlyErrorsWebpackPlugin {
   }
 
   displaySuccess(stats) {
+    if (!this.shouldDisplaySuccess) {
+      return;
+    }
+
     const time = isMultiStats(stats) ? this.getMultiStatsCompileTime(stats) : this.getStatsCompileTime(stats);
     output.title('success', 'DONE', 'Compiled successfully in ' + time + 'ms');
 
