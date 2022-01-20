@@ -30,7 +30,7 @@ class FriendlyErrorsWebpackPlugin {
     this.compilationSuccessInfo = options.compilationSuccessInfo || {};
     this.onErrors = options.onErrors;
     this.shouldClearConsole = options.clearConsole == null ? true : Boolean(options.clearConsole);
-    this.shouldDisplaySuccess = options.displaySuccess == null ? true : Boolean(options.displaySuccess);
+    this.shouldDisplayLog = options.displayLog == null ? true : Boolean(options.displayLog);
     this.formatters = concat(defaultFormatters, options.additionalFormatters);
     this.transformers = concat(defaultTransformers, options.additionalTransformers);
     this.previousEndTimes = {};
@@ -60,6 +60,10 @@ class FriendlyErrorsWebpackPlugin {
     };
 
     const invalidFn = () => {
+      if (!this.shouldDisplayLog) {
+        return;
+      }
+
       this.clearConsole();
       output.title('info', 'WAIT', 'Compiling...');
     };
@@ -82,7 +86,7 @@ class FriendlyErrorsWebpackPlugin {
   }
 
   displaySuccess(stats) {
-    if (!this.shouldDisplaySuccess) {
+    if (!this.shouldDisplayLog) {
       return;
     }
 
